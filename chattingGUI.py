@@ -142,8 +142,10 @@ class Chat():
 
     def reply(self):
         api_url = "http://openapi.tuling123.com/openapi/api/v2"
-        self.__api = open(path + 'api.rtf')
+        self.__api = open(path + 'api.txt')
         self.__key = self.__api.read()
+        self.__id = open(path + 'id.txt')
+        self.__id = self.__id.read()
         self.__req = {
             "perception":
             {
@@ -166,7 +168,7 @@ class Chat():
             "userInfo":
             {
                 "apiKey": str(self.__key),
-                "userId": "417148"
+                "userId": str(self.__id)
             }
         }
         self.__req = json.dumps(self.__req).encode('utf8')
