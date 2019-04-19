@@ -8,7 +8,10 @@ import json
 from tkinter import *
 import time
 import urllib.request
+import sys
 
+path = sys.argv[0]
+path = path[:-7]
 
 class Base():
     def __init__(self, master):
@@ -45,7 +48,7 @@ class Pay():
         self.master.config(bg='Aquamarine')
         self.pay = Frame(self.master)
         self.pay.pack(expand=YES, fill=BOTH, anchor=CENTER, padx=20)
-        img = PhotoImage(file="pay.gif")
+        img = PhotoImage(file= path + "pay.gif")
         lblImage = Label(self.pay, image=img)
         lblImage.image = img
         lblImage.pack()
@@ -139,7 +142,7 @@ class Chat():
 
     def reply(self):
         api_url = "http://openapi.tuling123.com/openapi/api/v2"
-        self.__api = open('api.rtf')
+        self.__api = open(path + 'api.rtf')
         self.__key = self.__api.read()
         self.__req = {
             "perception":
@@ -188,3 +191,7 @@ class Chat():
         self.frmLB.destroy()
         self.frmLC.destroy()
         Initface(self.master)
+
+
+if __name__ == "__main__":
+    print(path + 'api.rtf')
