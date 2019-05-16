@@ -4,7 +4,7 @@ Description: Chatting with Aiping
 
 @author: Siping Wang
 """
-from chattingGUI import *
+from aiping.chattingGUI import *
 
 
 root = Tk()

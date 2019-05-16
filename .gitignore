@@ -1,7 +1,9 @@
-*.txt
+id.txt
+api.txt
 
 .vscode
 .idea
+.envrc
 
 
 # Created by https://www.gitignore.io/api/python
