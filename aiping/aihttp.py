@@ -1,16 +1,10 @@
 import urllib.request
 import json
 from pathlib import Path
-import logging
-
-LOGGER = logging.getLogger()
-
-TURING_ID_FILE = 'id.txt'
-TURING_KEY_FILE = 'api.txt'
-
+import sys
+from .setting import TURING_ID_FILE, TURING_KEY_FILE
 
 class Request:
-    logger = LOGGER
 
     def __init__(self, url, method=None, data=None, headers=None, encoding='utf-8', expect_json=False):
         self.url = url
@@ -35,8 +29,7 @@ class Request:
         if f.is_file():
             return f.read_text()
         else:
-            cls.logger.warn('Credential file not found at {}'.format(f))
-            return ''
+            raise FileNotFoundError('Credential file not found at {}'.format(f))
 
 
 class TuringRequest(Request):
@@ -87,9 +80,9 @@ class TuringRequest(Request):
 
     @classmethod
     def init_credential(cls):
-        cls.cwd = Path.cwd()
-        f1 = cls.cwd / TURING_ID_FILE
-        f2 = cls.cwd / TURING_KEY_FILE
+        cls.dir = (Path.cwd()/sys.argv[0]).parent
+        f1 = cls.dir / TURING_ID_FILE
+        f2 = cls.dir / TURING_KEY_FILE
         cls.api_id = cls.read_file(f1)
         cls.api_key = cls.read_file(f2)
 

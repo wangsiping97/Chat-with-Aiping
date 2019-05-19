@@ -9,6 +9,7 @@ from tkinter import *
 import time
 import urllib.request
 import sys
+from .aihttp import TuringRequest
 
 path = sys.argv[0]
 path = path[:-7]
@@ -141,49 +142,15 @@ class Chat():
         self.txtMsg.delete('0.0', END)
 
     def reply(self):
-        api_url = "http://openapi.tuling123.com/openapi/api/v2"
-        self.__api = open(path + 'api.txt')
-        self.__key = self.__api.read()
-        self.__id = open(path + 'id.txt')
-        self.__id = self.__id.read()
-        self.__req = {
-            "perception":
-            {
-                "inputText":
-                {
-                    "text": str(self.txtMsg.get(0.0, END))
-                },
-
-                "selfInfo":
-                {
-                    "location":
-                    {
-                        "city": "北京",
-                        "province": "北京",
-                        "street": "清华路"
-                    }
-                }
-            },
-
-            "userInfo":
-            {
-                "apiKey": str(self.__key),
-                "userId": str(self.__id)
-            }
-        }
-        self.__req = json.dumps(self.__req).encode('utf8')
+        replyMsg = "Aiping:"+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n'
         try:
-            http_post = urllib.request.Request(api_url, data=self.__req, headers={'content-type': 'application/json'})
-            response = urllib.request.urlopen(http_post)
-            response_str = response.read().decode('utf8')
-            response_dic = json.loads(response_str)
-            results_text = response_dic['results'][0]['values']['text']
-            replyMsg = "Aiping:"+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n'
-        except:
-            replyMsg = "Aiping:"+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n'
-            self.txtMsgList.insert(END, replyMsg, 'bluecolor')
-            self.txtMsgList.insert(END, "没有网了 QAQ" + '\n')
-            return 0
+            req = TuringRequest(str(self.txtMsg.get(0.0, END)))
+            results_text = req.send()
+        except FileNotFoundError as e:
+            results_text = str(e)
+        except Exception as e:
+            print(e)
+            results_text = "没有网了 QAQ"
 
         self.txtMsgList.insert(END, replyMsg, 'bluecolor')
         self.txtMsgList.insert(END, results_text + '\n')
